@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
@@ -12,11 +11,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Slf4j
+@Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private final static Logger log = LoggerFactory.getLogger(FilmController.class);
     private final static Map<Integer, Film> films = new HashMap<>();
     private Integer id = 1;
     @GetMapping
@@ -26,16 +24,13 @@ public class FilmController {
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        //((ch.qos.logback.classic.Logger) log).setLevel(Level.DEBUG);
-        if (!films.containsKey(film.getId())) {
-            film.setId(id++);
-            films.put(film.getId(), film);
-            log.debug("Фильм добавлен");
-            return film;
-
-        } else {
+        if (films.containsKey(film.getId())) {
             throw new ContentAlreadyExistException("Фильм уже существует в медиатеке");
         }
+        film.setId(id++);
+        films.put(film.getId(), film);
+        log.debug("Фильм добавлен");
+        return film;
     }
 
     @PutMapping

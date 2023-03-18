@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface MovieBirthday {
 
-    String message() default "Фильм должен быть года выпуска не ранее 28.12.1895г";
+    String message() default "Фильм должен быть года выпуска не ранее 28.12.1895г и не позднее настоящего времени";
 
     Class<?>[] groups() default { };
 

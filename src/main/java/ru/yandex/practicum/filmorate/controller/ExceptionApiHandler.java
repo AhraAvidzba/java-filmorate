@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,12 +25,4 @@ public class ExceptionApiHandler {
                 .body(new ErrorMessage(exception.getMessage()));
     }
 
-}
-
-@Getter
-class ErrorMessage {
-    String message;
-    ErrorMessage(String message) {
-        this.message = message;
-    }
 }

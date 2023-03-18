@@ -9,8 +9,16 @@ import java.time.LocalDate;
 @Builder
 public class Film {
     private Integer id;
-    @EqualsAndHashCode.Exclude @NotBlank private final String name;
-    @EqualsAndHashCode.Exclude @Size(max = 200) private final String description;
-    @EqualsAndHashCode.Exclude @MovieBirthday private final LocalDate releaseDate;
-    @EqualsAndHashCode.Exclude @Positive private Long duration;
+    @EqualsAndHashCode.Exclude
+    @NotBlank
+    private String name;
+    @EqualsAndHashCode.Exclude
+    @Size(max = 200)
+    private String description;
+    @EqualsAndHashCode.Exclude
+    @MovieBirthday
+    private LocalDate releaseDate;
+    @EqualsAndHashCode.Exclude
+    @Positive
+    private Long duration;
 }
