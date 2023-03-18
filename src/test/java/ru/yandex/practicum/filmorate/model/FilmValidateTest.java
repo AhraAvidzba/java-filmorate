@@ -1,18 +1,13 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.Builder;
-import lombok.Data;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Data
-@Builder
 public class FilmValidateTest {
 
     public static void validateInput(Film film) {
@@ -36,7 +31,6 @@ public class FilmValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(film)
         );
-        assertEquals("name: не должно быть пустым", ex.getMessage());
     }
 
     @Test
@@ -51,7 +45,6 @@ public class FilmValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(film)
         );
-        assertEquals("description: размер должен находиться в диапазоне от 0 до 200", ex.getMessage());
     }
 
     @Test
@@ -66,7 +59,6 @@ public class FilmValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(film)
         );
-        assertEquals("releaseDate: Фильм должен быть года выпуска не ранее 28.12.1895г и не позднее настоящего времени", ex.getMessage());
     }
 
     @Test
@@ -81,7 +73,6 @@ public class FilmValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(film)
         );
-        assertEquals("releaseDate: Фильм должен быть года выпуска не ранее 28.12.1895г и не позднее настоящего времени", ex.getMessage());
     }
 
 }

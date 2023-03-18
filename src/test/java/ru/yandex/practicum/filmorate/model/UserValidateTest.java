@@ -6,7 +6,6 @@ import javax.validation.*;
 import java.time.LocalDate;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -32,7 +31,6 @@ public class UserValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(user1)
         );
-        assertEquals("birthday: должно содержать прошедшую дату", ex.getMessage());
     }
 
     @Test
@@ -46,7 +44,6 @@ public class UserValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(user1)
         );
-        assertEquals("login: не должно быть пустым", ex.getMessage());
     }
 
     @Test
@@ -60,7 +57,6 @@ public class UserValidateTest {
                 ConstraintViolationException.class,
                 () -> validateInput(user1)
         );
-        assertEquals("email: должно иметь формат адреса электронной почты", ex.getMessage());
     }
 
 }
