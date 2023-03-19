@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 class ErrorMessage {
-    String message;
+    private final String message;
     ErrorMessage(String message) {
         this.message = message;
     }

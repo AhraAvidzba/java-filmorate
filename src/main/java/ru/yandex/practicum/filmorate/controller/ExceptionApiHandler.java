@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
 
-//@Slf4j
 @RestControllerAdvice
 public class ExceptionApiHandler {
 
