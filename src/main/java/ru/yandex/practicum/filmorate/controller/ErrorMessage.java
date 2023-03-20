@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 class ErrorMessage {
     private final String message;
-    ErrorMessage(String message) {
+    public ErrorMessage(String message) {
         this.message = message;
     }
 }
