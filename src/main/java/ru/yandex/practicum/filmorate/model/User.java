@@ -9,12 +9,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Builder
 @Validated
 public class User {
-    private Integer id;
+    private Long id;
     @EqualsAndHashCode.Exclude
     @Past
     private LocalDate birthday;
@@ -26,4 +27,6 @@ public class User {
     private String email;
     @EqualsAndHashCode.Exclude
     private String name;
+
+    private final Set<Long> friendsList;
 }

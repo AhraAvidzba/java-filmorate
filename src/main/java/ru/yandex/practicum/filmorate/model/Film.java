@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class Film {
-    private Integer id;
+    private Long id;
     @EqualsAndHashCode.Exclude
     @NotBlank
     private String name;
