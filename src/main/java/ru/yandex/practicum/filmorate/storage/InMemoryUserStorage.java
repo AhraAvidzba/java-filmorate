@@ -14,7 +14,7 @@ public class InMemoryUserStorage implements  UserStorage {
 
     private final Map<Long, User> users= new HashMap<>();
 
-    private Long globalId;
+    private Long globalId=1L;
     @Override
     public List<User> getAllUsers() {
         return List.copyOf(users.values());
@@ -38,6 +38,9 @@ public class InMemoryUserStorage implements  UserStorage {
         if (users.containsKey(user.getId())) {
             throw  new ContentAlreadyExistException("Пользователь уже присутствует в базе данных");
         }
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
         user.setId(generateId());
         users.put(user.getId(), user);
         return user.getId();
@@ -45,7 +48,7 @@ public class InMemoryUserStorage implements  UserStorage {
 
     @Override
     public void updateUser(User user) {
-        if (user.getId() == null) {
+        if (user.getId() == null || !users.containsKey(user.getId())) {
             throw new ContentNotFountException("Пользователь не найден");
         }
         users.put(user.getId(), user);

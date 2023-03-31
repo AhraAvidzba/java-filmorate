@@ -4,6 +4,8 @@ import ru.yandex.practicum.filmorate.validations.MovieBirthday;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Set;
 
 @Data
 @Builder
@@ -21,4 +23,8 @@ public class Film {
     @EqualsAndHashCode.Exclude
     @Positive
     private Long duration;
+    private Integer rate;
+
+    private final Set<Long> userLikes = Collections.emptySet();
+
 }

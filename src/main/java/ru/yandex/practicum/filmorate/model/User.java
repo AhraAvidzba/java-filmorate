@@ -9,11 +9,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Set;
 
 @Data
 @Builder
-@Validated
 public class User {
     private Long id;
     @EqualsAndHashCode.Exclude
@@ -28,5 +28,5 @@ public class User {
     @EqualsAndHashCode.Exclude
     private String name;
 
-    private final Set<Long> friendsList;
+    private final Set<User> friendsList = Collections.emptySet();
 }

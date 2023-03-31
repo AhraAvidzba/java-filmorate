@@ -13,7 +13,7 @@ import java.util.Map;
 public class InMemoryFilmStorage implements  FilmStorage {
 
     private final Map<Long, Film> films= new HashMap<>();
-    private Long globalId;
+    private Long globalId = 1L;
     @Override
     public List<Film> getAllFilms() {
         return List.copyOf(films.values());
@@ -44,7 +44,7 @@ public class InMemoryFilmStorage implements  FilmStorage {
 
     @Override
     public void updateFilm(Film film) {
-        if (film.getId() == null) {
+        if (film.getId() == null || !films.containsKey(film.getId())) {
             throw new ContentNotFountException("Фильм не найден");
         }
         films.put(film.getId(), film);
