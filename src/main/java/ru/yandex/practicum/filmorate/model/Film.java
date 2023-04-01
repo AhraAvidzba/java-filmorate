@@ -1,10 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
-import lombok.*;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.validations.MovieBirthday;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -23,8 +28,8 @@ public class Film {
     @EqualsAndHashCode.Exclude
     @Positive
     private Long duration;
-    private Integer rate;
+    //private Integer rate;
 
-    private final Set<Long> userLikes = Collections.emptySet();
+    private final Set<Long> userLikes = new LinkedHashSet<>();
 
 }

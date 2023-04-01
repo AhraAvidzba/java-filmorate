@@ -55,4 +55,8 @@ public class FilmController {
         filmService.removeLike(userId, filmId);
     }
 
+    @GetMapping("/{id}")
+    public Film commonFriends(@PathVariable(name = "id") Long filmId) {
+        return filmService.getFilmStorage().getFilmById(filmId);
+    }
 }

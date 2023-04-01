@@ -38,7 +38,7 @@ public class InMemoryUserStorage implements  UserStorage {
         if (users.containsKey(user.getId())) {
             throw  new ContentAlreadyExistException("Пользователь уже присутствует в базе данных");
         }
-        if (user.getName() == null) {
+        if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());
         }
         user.setId(generateId());
@@ -50,6 +50,9 @@ public class InMemoryUserStorage implements  UserStorage {
     public void updateUser(User user) {
         if (user.getId() == null || !users.containsKey(user.getId())) {
             throw new ContentNotFountException("Пользователь не найден");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            user.setName(user.getLogin());
         }
         users.put(user.getId(), user);
     }

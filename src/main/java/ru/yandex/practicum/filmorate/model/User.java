@@ -3,13 +3,12 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -28,5 +27,5 @@ public class User {
     @EqualsAndHashCode.Exclude
     private String name;
 
-    private final Set<User> friendsList = Collections.emptySet();
+    private final Set<Long> friendsList = new LinkedHashSet<>();
 }

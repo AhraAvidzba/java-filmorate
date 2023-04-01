@@ -3,16 +3,12 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
-import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -46,7 +42,8 @@ public class UserController {
     @PutMapping("/{id}/friends/{friendId}")
     public void addFriend(@PathVariable(name = "id") Long userId, @PathVariable Long friendId) {
         userService.addToFriendsList(userId, friendId);
-        log.debug("Пользователь добавлен в друзья");
+        log.debug("Пользователь c id {} добавлен в друзья пользователя с id {}", friendId, userId);
+        //return userService.getUserStorage().getUserById(userId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
@@ -56,12 +53,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    public void findFriends(@PathVariable(name = "id") Long userId) {
-        userService.findAllFriends(userId);
+    public List<User> findFriends(@PathVariable(name = "id") Long userId) {
+        return userService.findAllFriends(userId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public void commonFriends(@PathVariable(name = "id") Long userId, @PathVariable Long otherId) {
-        userService.findCommonFriends(userId, otherId);
+    public List<User> commonFriends(@PathVariable(name = "id") Long userId, @PathVariable Long otherId) {
+        return userService.findCommonFriends(userId, otherId);
+    }
+
+    @GetMapping("/{id}")
+    public User commonFriends(@PathVariable(name = "id") Long userId) {
+        return userService.getUserStorage().getUserById(userId);
     }
 }
