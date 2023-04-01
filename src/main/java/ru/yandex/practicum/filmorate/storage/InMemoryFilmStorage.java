@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements  FilmStorage {
+public class InMemoryFilmStorage implements FilmStorage {
 
-    private final Map<Long, Film> films= new HashMap<>();
+    private final Map<Long, Film> films = new HashMap<>();
     private Long globalId = 1L;
+
     @Override
     public List<Film> getAllFilms() {
         return List.copyOf(films.values());
@@ -35,7 +36,7 @@ public class InMemoryFilmStorage implements  FilmStorage {
     @Override
     public Long putFilm(Film film) {
         if (films.containsKey(film.getId())) {
-            throw  new ContentAlreadyExistException("Фильм уже присутствует в медиатеке");
+            throw new ContentAlreadyExistException("Фильм уже присутствует в медиатеке");
         }
         film.setId(generateId());
         films.put(film.getId(), film);

@@ -10,11 +10,12 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryUserStorage implements  UserStorage {
+public class InMemoryUserStorage implements UserStorage {
 
-    private final Map<Long, User> users= new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
 
-    private Long globalId=1L;
+    private Long globalId = 1L;
+
     @Override
     public List<User> getAllUsers() {
         return List.copyOf(users.values());
@@ -36,7 +37,7 @@ public class InMemoryUserStorage implements  UserStorage {
     @Override
     public Long putUser(User user) {
         if (users.containsKey(user.getId())) {
-            throw  new ContentAlreadyExistException("Пользователь уже присутствует в базе данных");
+            throw new ContentAlreadyExistException("Пользователь уже присутствует в базе данных");
         }
         if (user.getName() == null || user.getName().isEmpty()) {
             user.setName(user.getLogin());

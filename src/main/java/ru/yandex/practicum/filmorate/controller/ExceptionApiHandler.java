@@ -30,7 +30,7 @@ public class ExceptionApiHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleException(MethodArgumentNotValidException exception) {
-        Map<String, String > map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         exception.getBindingResult().getAllErrors().forEach(e -> {
             String field = ((FieldError) e).getField();
             String message = e.getDefaultMessage();

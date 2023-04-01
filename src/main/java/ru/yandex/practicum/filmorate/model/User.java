@@ -14,6 +14,7 @@ import java.util.Set;
 @Data
 @Builder
 public class User {
+    private final Set<Long> friendsList = new LinkedHashSet<>();
     private Long id;
     @EqualsAndHashCode.Exclude
     @Past
@@ -26,6 +27,4 @@ public class User {
     private String email;
     @EqualsAndHashCode.Exclude
     private String name;
-
-    private final Set<Long> friendsList = new LinkedHashSet<>();
 }

@@ -15,6 +15,7 @@ import java.util.Set;
 @Data
 @Builder
 public class Film {
+    private final Set<Long> userLikes = new LinkedHashSet<>();
     private Long id;
     @EqualsAndHashCode.Exclude
     @NotBlank
@@ -25,11 +26,9 @@ public class Film {
     @EqualsAndHashCode.Exclude
     @MovieBirthday
     private LocalDate releaseDate;
+    //private Integer rate;
     @EqualsAndHashCode.Exclude
     @Positive
     private Long duration;
-    //private Integer rate;
-
-    private final Set<Long> userLikes = new LinkedHashSet<>();
 
 }

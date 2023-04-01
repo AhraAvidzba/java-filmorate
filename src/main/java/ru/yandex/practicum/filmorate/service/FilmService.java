@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class FilmService {
     FilmStorage filmStorage;
     UserStorage userStorage;
+
     @Autowired
     public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
         this.filmStorage = filmStorage;
@@ -35,7 +36,7 @@ public class FilmService {
 
     public List<Film> findPopularFilms(Integer size) {
 
-        if (size == null || size <=0) {
+        if (size == null || size <= 0) {
             throw new RuntimeException("Значение size должно быть больше нуля");
         }
         return filmStorage.getAllFilms().stream()

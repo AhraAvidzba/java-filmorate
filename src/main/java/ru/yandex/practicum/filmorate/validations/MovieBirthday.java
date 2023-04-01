@@ -17,8 +17,8 @@ public @interface MovieBirthday {
 
     String message() default "Фильм должен быть года выпуска не ранее 28.12.1895г и не позднее настоящего времени";
 
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 
 }
