@@ -12,9 +12,9 @@ public interface FilmStorage {
 
     Film getFilmById(Long id);
 
-    Long putFilm(Film task);
+    Film putFilm(Film task);
 
-    void updateFilm(Film task);
+    Film updateFilm(Film task);
 
     void removeFilmById(Long id);
 }

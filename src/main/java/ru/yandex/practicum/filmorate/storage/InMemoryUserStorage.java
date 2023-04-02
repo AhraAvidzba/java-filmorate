@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
-import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashMap;
@@ -28,41 +26,24 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUserById(Long id) {
-        if (!users.containsKey(id)) {
-            throw new ContentNotFountException("Пользователь не найден");
-        }
         return users.get(id);
     }
 
     @Override
-    public Long putUser(User user) {
-        if (users.containsKey(user.getId())) {
-            throw new ContentAlreadyExistException("Пользователь уже присутствует в базе данных");
-        }
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
+    public User putUser(User user) {
         user.setId(generateId());
         users.put(user.getId(), user);
-        return user.getId();
+        return user;
     }
 
     @Override
-    public void updateUser(User user) {
-        if (user.getId() == null || !users.containsKey(user.getId())) {
-            throw new ContentNotFountException("Пользователь не найден");
-        }
-        if (user.getName() == null || user.getName().isEmpty()) {
-            user.setName(user.getLogin());
-        }
+    public User updateUser(User user) {
         users.put(user.getId(), user);
+        return user;
     }
 
     @Override
     public void removeUserById(Long id) {
-        if (!users.containsKey(id)) {
-            throw new ContentNotFountException("Пользователь не найден");
-        }
         users.remove(id);
     }
 

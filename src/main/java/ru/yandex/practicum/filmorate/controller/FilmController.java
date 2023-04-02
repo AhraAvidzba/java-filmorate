@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -13,31 +13,27 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
     private final FilmService filmService;
 
-    @Autowired
-    public FilmController(FilmService filmService) {
-        this.filmService = filmService;
-    }
-
     @GetMapping
     public Collection<Film> findAll() {
-        return filmService.getFilmStorage().getAllFilms();
+        return filmService.getAllFilms();
     }
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        filmService.getFilmStorage().putFilm(film);
+        Film createdFilm = filmService.putFilm(film);
         log.debug("Фильм добавлен");
-        return film;
+        return createdFilm;
     }
 
     @PutMapping
     public Film put(@Valid @RequestBody Film film) {
-        filmService.getFilmStorage().updateFilm(film);
+        Film updatedFilm = filmService.updateFilm(film);
         log.debug("Фильм обновлен");
-        return film;
+        return updatedFilm;
     }
 
     @GetMapping("/popular")
@@ -56,7 +52,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Film commonFriends(@PathVariable(name = "id") Long filmId) {
-        return filmService.getFilmStorage().getFilmById(filmId);
+    public Film getFilmById(@PathVariable(name = "id") Long filmId) {
+        return filmService.getFilmById(filmId);
     }
 }

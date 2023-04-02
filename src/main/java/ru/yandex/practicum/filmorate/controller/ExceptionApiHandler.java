@@ -18,13 +18,13 @@ public class ExceptionApiHandler {
     @ExceptionHandler(ContentAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, String> handleException(ContentAlreadyExistException exception) {
-        return Map.of("ошибка конфликта", exception.getMessage());
+        return Map.of("message", exception.getMessage());
     }
 
     @ExceptionHandler(ContentNotFountException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleException(ContentNotFountException exception) {
-        return Map.of("ошибка", exception.getMessage());
+        return Map.of("message", exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

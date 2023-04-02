@@ -26,7 +26,6 @@ public class Film {
     @EqualsAndHashCode.Exclude
     @MovieBirthday
     private LocalDate releaseDate;
-    //private Integer rate;
     @EqualsAndHashCode.Exclude
     @Positive
     private Long duration;
