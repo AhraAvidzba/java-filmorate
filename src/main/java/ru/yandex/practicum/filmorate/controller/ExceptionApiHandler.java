@@ -8,35 +8,33 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
 import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
-
-import java.util.HashMap;
-import java.util.Map;
+import ru.yandex.practicum.filmorate.model.ErrorMessage;
 
 @RestControllerAdvice
 public class ExceptionApiHandler {
 
     @ExceptionHandler(ContentAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public Map<String, String> handleException(ContentAlreadyExistException exception) {
-        return Map.of("message", exception.getMessage());
+    public ErrorMessage handleException(ContentAlreadyExistException exception) {
+        return new ErrorMessage("message", exception.getMessage());
     }
 
     @ExceptionHandler(ContentNotFountException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleException(ContentNotFountException exception) {
-        return Map.of("message", exception.getMessage());
+    public ErrorMessage handleException(ContentNotFountException exception) {
+        return new ErrorMessage("message", exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleException(MethodArgumentNotValidException exception) {
-        Map<String, String> map = new HashMap<>();
+    public ErrorMessage handleException(MethodArgumentNotValidException exception) {
+        ErrorMessage messages = new ErrorMessage();
         exception.getBindingResult().getAllErrors().forEach(e -> {
             String field = ((FieldError) e).getField();
             String message = e.getDefaultMessage();
-            map.put(field, message);
+            messages.setMessage(field, message);
         });
-        return map;
+        return messages;
     }
 
 }

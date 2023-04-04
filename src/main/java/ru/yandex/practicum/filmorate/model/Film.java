@@ -18,16 +18,16 @@ public class Film {
     private final Set<Long> userLikes = new LinkedHashSet<>();
     private Long id;
     @EqualsAndHashCode.Exclude
-    @NotBlank
+    @NotBlank(message = "Не должно быть пустым")
     private String name;
     @EqualsAndHashCode.Exclude
-    @Size(max = 200)
+    @Size(max = 200, message = "Количество символов должно быть менее 200")
     private String description;
     @EqualsAndHashCode.Exclude
     @MovieBirthday
     private LocalDate releaseDate;
     @EqualsAndHashCode.Exclude
-    @Positive
+    @Positive(message = "Должно быть больше нуля")
     private Long duration;
 
 }
