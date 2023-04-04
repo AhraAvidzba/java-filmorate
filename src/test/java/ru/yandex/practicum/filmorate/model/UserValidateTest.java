@@ -23,7 +23,7 @@ public class UserValidateTest {
     @Test
     public void shouldThrowExceptionWhenDateInFuture() {
         User user1 = User.builder()
-                .birthday(LocalDate.of(3000,8,30))
+                .birthday(LocalDate.of(3000, 8, 30))
                 .login("akhraa1")
                 .email("akhraa1@yandex.ru")
                 .build();
@@ -36,7 +36,7 @@ public class UserValidateTest {
     @Test
     public void shouldThrowExceptionWhenLoginIsEmpty() {
         User user1 = User.builder()
-                .birthday(LocalDate.of(1992,8,30))
+                .birthday(LocalDate.of(1992, 8, 30))
                 .login("")
                 .email("akhraa1@yandex.ru")
                 .build();
@@ -49,7 +49,7 @@ public class UserValidateTest {
     @Test
     public void shouldThrowExceptionWhenEmailNotValid() {
         User user1 = User.builder()
-                .birthday(LocalDate.of(1992,8,30))
+                .birthday(LocalDate.of(1992, 8, 30))
                 .login("akhraa1")
                 .email("333")
                 .build();
