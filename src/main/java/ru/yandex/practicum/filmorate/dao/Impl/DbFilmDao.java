@@ -14,10 +14,9 @@ import ru.yandex.practicum.filmorate.model.enums.Rating;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component("dbFilmDao")
 @RequiredArgsConstructor
@@ -27,9 +26,12 @@ public class DbFilmDao implements FilmDao {
 
     @Override
     public List<Film> getAllFilms() {
-        String sql = "SELECT * " +
-                "FROM film AS f ";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> makeFilm(rs));
+        String sql = "SELECT f.*, g.name AS genre_name, l.user_id AS liked_user " +
+                "FROM film_genre AS fg " +
+                "RIGHT JOIN film AS f ON fg.film_id = f.film_id " +
+                "LEFT JOIN genre AS g ON fg.genre_id = g.genre_id " +
+                "LEFT JOIN likes AS l ON fg.film_id = l.film_id ";
+        return jdbcTemplate.query(sql, this::makeFilms);
     }
 
     @Override
@@ -40,8 +42,18 @@ public class DbFilmDao implements FilmDao {
 
     @Override
     public Film getFilmById(Long id) {
-        String sql = "SELECT * FROM film WHERE film_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
+        //String sql = "SELECT * FROM film WHERE film_id = ?";
+        //return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs), id);
+        String sql = "SELECT f.*, g.name AS genre_name, l.user_id AS liked_user " +
+                "FROM film_genre AS fg " +
+                "RIGHT JOIN film AS f ON fg.film_id = f.film_id " +
+                "LEFT JOIN genre AS g ON fg.genre_id = g.genre_id " +
+                "LEFT JOIN likes AS l ON fg.film_id = l.film_id " +
+                "WHERE f.film_id = ? ";
+
+        List<Film> films = jdbcTemplate.query(sql, this::makeFilms, id);
+        assert films != null;
+        return films.isEmpty() ? null : films.get(0);
     }
 
     @Override
@@ -154,33 +166,44 @@ public class DbFilmDao implements FilmDao {
         return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("genre_id"), genre).get(0);
     }
 
-    private Film makeFilm(ResultSet rs) throws SQLException {
-        return Film.builder().id(rs.getLong("film_id"))
-                .name(rs.getString("name"))
-                .description(rs.getString("description"))
-                .releaseDate(rs.getDate("release_date").toLocalDate())
-                .duration(rs.getInt("duration"))
-                .rating(Rating.valueOf(rs.getString("rating")))
-                .genre(makeGenreList(rs.getLong("film_id")))
-                .userLikes(makeLikeList(rs.getLong("film_id")))
-                .build();
-    }
+    private List<Film> makeFilms(ResultSet rs) throws SQLException {
+        Map<Long, Set<Long>> likes = new HashMap<>();
+        Map<Long, Set<Genre>> genres = new HashMap<>();
+        Map<Long, String> names = new HashMap<>();
+        Map<Long, String> descriptions = new HashMap<>();
+        Map<Long, LocalDate> releaseDates = new HashMap<>();
+        Map<Long, Integer> durations = new HashMap<>();
+        Map<Long, Rating> ratings = new HashMap<>();
 
-    private Set<Genre> makeGenreList(Long film_id) throws SQLException {
-        String sql = "SELECT g.name " +
-                "FROM film_genre AS fg " +
-                "JOIN genre AS g ON g.genre_id = fg.genre_id " +
-                "JOIN film AS f ON f.film_id = fg.film_id " +
-                "WHERE f.film_id = ?";
-        return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> Genre.valueOf(rs.getString("name")), film_id));
-    }
+        while (rs.next()) {
+            Long filmId = rs.getLong("film_id");
 
-    private Set<Long> makeLikeList(Long film_id) throws SQLException {
-        String sql = "SELECT u.user_id " +
-                "FROM likes AS l " +
-                "JOIN _user AS u ON u.user_id = l.user_id " +
-                "JOIN film AS f ON f.film_id = l.film_id " +
-                "WHERE f.film_id = ? ";
-        return new HashSet<>(jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("user_id"), film_id));
+            likes.putIfAbsent(filmId, new HashSet<>());
+            Long like = rs.getLong("liked_user");
+            likes.get(filmId).add(like);
+
+            genres.putIfAbsent(filmId, new HashSet<>());
+            Genre genre = Genre.valueOf(rs.getString("genre_name"));
+            genres.get(filmId).add(genre);
+
+            names.putIfAbsent(filmId, rs.getString("name"));
+            descriptions.putIfAbsent(filmId, rs.getString("description"));
+            releaseDates.putIfAbsent(filmId, rs.getDate("release_date").toLocalDate());
+            durations.putIfAbsent(filmId, rs.getInt("duration"));
+            ratings.putIfAbsent(filmId, Rating.valueOf(rs.getString("rating")));
+        }
+
+        return names.keySet().stream().map(id -> {
+            return Film.builder()
+                    .id(id)
+                    .name(names.get(id))
+                    .description(descriptions.get(id))
+                    .releaseDate(releaseDates.get(id))
+                    .duration(durations.get(id))
+                    .rating(ratings.get(id))
+                    .genre(genres.get(id))
+                    .userLikes(likes.get(id))
+                    .build();
+        }).collect(Collectors.toList());
     }
 }
