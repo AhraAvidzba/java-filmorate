@@ -2,6 +2,10 @@
 ## ER-диаграмма, отражающая взаимосвязь существующих таблиц базы данных
 ![ER-диаграмма](src/main/resources/static/ER-diagram.png)
 
+## Пояснения логики дружбы
+- дружба является односторонней. Это значит, что если какой-то пользователь оставил вам заявку в друзья, то он будет в списке ваших друзей, а вы в его — нет.
+- Удаление из друзей равноценно отмене ранее отправленного запроса на добавление в друзья с соответствующим изменением статуса дружбы
+- Подтверждение заявки на добавление в друзья равноценно ответной отправке заявки на добавление в друзья с соответствующим изменением статуса дружбы. 
 ## Примеры запросов к базе данных
 ### 1. Работа с сущностью film
 - *Получение списка всех фильмов*
@@ -39,13 +43,13 @@
 ```
 - *Получение списка из id друзей пользователя*
 ```
-    SELECT f.friend_id
-    FROM friendship AS f
-    WHERE f.user_id = :id AND f.status = 'CONFIRMED'
-    UNION
-    SELECT f.user_id
-    FROM friendship AS f
-    WHERE f.friend_id = :id AND f.status = 'CONFIRMED'
+SELECT f.friend_id
+FROM friendship AS f
+WHERE f.user_id = 2 AND f.status = 'CONFIRMED'
+UNION
+SELECT f.user_id
+FROM friendship AS f
+WHERE f.friend_id = 2 AND f.status = 'CONFIRMED' OR f.status = 'UNCONFIRMED'
 ```
 - *Получение списка id общих друзей двух пользователей*
 ```

@@ -3,18 +3,19 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.yandex.practicum.filmorate.model.enums.Status;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Builder
 public class User {
-    private final Set<Long> friendsList = new LinkedHashSet<>();
+    private Map<Long, Status> friendsList = new HashMap<>();
     private Long id;
     @EqualsAndHashCode.Exclude
     @Past(message = "Дата должна быть в прошлом")
@@ -27,4 +28,13 @@ public class User {
     private String email;
     @EqualsAndHashCode.Exclude
     private String name;
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("birthday", birthday);
+        values.put("login", login);
+        values.put("email", email);
+        values.put("name", name);
+        return values;
+    }
 }
