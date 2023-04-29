@@ -58,16 +58,16 @@ public class FilmService {
         return filmDao.updateFilm(film);
     }
 
-    public void addLike(Long userId, Long filmId) {
+    public void addLike(Long filmId, Long userId) {
         checkUserId(userId);
         checkFilmId(filmId);
-        filmDao.putLike(userId, filmId);
+        filmDao.putLike(filmId, userId);
     }
 
-    public void removeLike(Long userId, Long filmId) {
+    public void removeLike(Long filmId, Long userId) {
         checkUserId(userId);
         checkFilmId(filmId);
-        filmDao.removeLike(userId, filmId);
+        filmDao.removeLike(filmId, userId);
     }
 
     public List<Film> findPopularFilms(Integer size) {

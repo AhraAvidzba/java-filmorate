@@ -111,15 +111,14 @@ public class DbFilmDao implements FilmDao {
 
     @Override
     public void putLike(Long filmId, Long userId) {
-        String sql = "MERGE INTO likes KEY (film_id, user_id) VALUES(?, ?);";
-        jdbcTemplate.update(sql, userId, filmId);
+        String sql = "MERGE INTO likes KEY (film_id, user_id) VALUES(?, ?)";
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     @Override
     public void removeLike(Long filmId, Long userId) {
         String sql = "DELETE FROM likes WHERE film_id = ? AND user_id = ?";
-        jdbcTemplate.update(sql, userId, filmId);
-
+        jdbcTemplate.update(sql, filmId, userId);
     }
 
     private void fillGenres(Film film, Long filmId) {
@@ -205,5 +204,10 @@ public class DbFilmDao implements FilmDao {
                     .userLikes(likes.get(id))
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    public void putGenre(Integer id, String name) {
+        String sql = "MERGE INTO genre KEY (genre_id) VALUES(?, ?)";
+        jdbcTemplate.update(sql, id, name);
     }
 }
