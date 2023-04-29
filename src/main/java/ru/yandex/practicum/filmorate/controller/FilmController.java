@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import javax.validation.Valid;
@@ -56,25 +54,5 @@ public class FilmController {
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable(name = "id") Long filmId) {
         return filmService.getFilmById(filmId);
-    }
-
-    @GetMapping("/genres")
-    public Collection<Genre> getGenres() {
-        return filmService.getGenres();
-    }
-
-    @GetMapping("/genres/{id}")
-    public Genre getGenreById(@PathVariable(name = "id") Long genreId) {
-        return filmService.getGenreById(genreId);
-    }
-
-    @GetMapping("/mpa")
-    public Collection<Rating> getRatings() {
-        return filmService.getRatings();
-    }
-
-    @GetMapping("/mpa/{id}")
-    public Rating getRatingById(@PathVariable(name = "id") Integer ratingId) {
-        return filmService.getRatingById(ratingId);
     }
 }

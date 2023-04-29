@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ru.yandex.practicum.filmorate.model.enums.Ratings;
 import ru.yandex.practicum.filmorate.validations.MovieBirthday;
 
 import javax.validation.constraints.NotBlank;
@@ -32,7 +31,7 @@ public class Film {
     @EqualsAndHashCode.Exclude
     @Positive(message = "Должно быть больше нуля")
     private Integer duration;
-    private Ratings rating;
+    private Rating mpa;
 
     public Map<String, Object> toMap() {
         Map<String, Object> values = new HashMap<>();
@@ -40,7 +39,7 @@ public class Film {
         values.put("login", description);
         values.put("release_date", releaseDate);
         values.put("duration", duration);
-        values.put("rating", rating);
+        values.put("rating", mpa);
         return values;
     }
 }

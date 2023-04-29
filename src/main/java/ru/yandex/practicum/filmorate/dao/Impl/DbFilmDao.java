@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.enums.Genres;
 import ru.yandex.practicum.filmorate.model.enums.Ratings;
 
@@ -60,7 +61,7 @@ public class DbFilmDao implements FilmDao {
             ps.setString(2, film.getDescription());
             ps.setDate(3, java.sql.Date.valueOf(film.getReleaseDate()));
             ps.setInt(4, film.getDuration());
-            ps.setString(5, film.getRating().toString());
+            ps.setString(5, Ratings.getRatingById(film.getMpa().getId()).toString());
             return ps;
         }, keyHolder);
 
@@ -72,6 +73,7 @@ public class DbFilmDao implements FilmDao {
         if (film.getUserLikes() == null) {
             film.setUserLikes(new HashSet<>());
         }
+
         //Сохраняем список лайков к фильму
         fillLikes(film, generatedId);
 
@@ -79,13 +81,13 @@ public class DbFilmDao implements FilmDao {
         fillGenres(film, generatedId);
 
         return getFilmById(generatedId);
-
     }
 
     @Override
     public Film updateFilm(Film film) {
         String sql = "UPDATE film SET name = ?, description = ?, release_date = ?, duration = ?, rating = ? WHERE film_id = ?";
-        jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(), film.getRating().toString(), film.getId());
+        jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(),
+                film.getDuration(), Ratings.getRatingById(film.getMpa().getId()).toString(), film.getId());
 
         if (film.getGenres() == null) {
             film.setGenres(new HashSet<>());
@@ -129,7 +131,7 @@ public class DbFilmDao implements FilmDao {
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setLong(1, film_id);
-                ps.setLong(2, getGenreId(genresList.get(i).getName().toString()));
+                ps.setLong(2, genresList.get(i).getId());
             }
 
             @Override
@@ -159,13 +161,6 @@ public class DbFilmDao implements FilmDao {
         });
     }
 
-    private Long getGenreId(String genre) {
-        String sql = "SELECT g.genre_id " +
-                "FROM genre AS g " +
-                "WHERE g.name = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getLong("genre_id"), genre).get(0);
-    }
-
     private List<Film> makeFilms(ResultSet rs) throws SQLException {
         Map<Long, Set<Long>> likes = new HashMap<>();
         Map<Long, Set<Genre>> genres = new HashMap<>();
@@ -173,7 +168,7 @@ public class DbFilmDao implements FilmDao {
         Map<Long, String> descriptions = new HashMap<>();
         Map<Long, LocalDate> releaseDates = new HashMap<>();
         Map<Long, Integer> durations = new HashMap<>();
-        Map<Long, Ratings> ratings = new HashMap<>();
+        Map<Long, Rating> ratings = new HashMap<>();
 
         while (rs.next()) {
             Long filmId = rs.getLong("film_id");
@@ -186,7 +181,7 @@ public class DbFilmDao implements FilmDao {
 
             genres.putIfAbsent(filmId, new HashSet<>());
             if (rs.getString("genre_name") != null) {
-                Genre genre = new Genre(rs.getLong("genre_id"), Genres.valueOf(rs.getString("genre_name")));
+                Genre genre = new Genre(rs.getLong("genre_id"), Genres.valueOf(rs.getString("genre_name")).getTranslate());
                 genres.get(filmId).add(genre);
             }
 
@@ -194,7 +189,8 @@ public class DbFilmDao implements FilmDao {
             descriptions.putIfAbsent(filmId, rs.getString("description"));
             releaseDates.putIfAbsent(filmId, rs.getDate("release_date").toLocalDate());
             durations.putIfAbsent(filmId, rs.getInt("duration"));
-            ratings.putIfAbsent(filmId, Ratings.valueOf(rs.getString("rating")));
+            ratings.putIfAbsent(filmId, new Rating(Ratings.getIdByRating(Ratings.valueOf(rs.getString("rating"))),
+                    Ratings.valueOf(rs.getString("rating")).getName()));
         }
 
         return names.keySet().stream().map(id -> {
@@ -204,8 +200,8 @@ public class DbFilmDao implements FilmDao {
                     .description(descriptions.get(id))
                     .releaseDate(releaseDates.get(id))
                     .duration(durations.get(id))
-                    .rating(ratings.get(id))
-                    .genres(genres.get(id))
+                    .mpa(ratings.get(id))
+                    .genres(genres.get(id).stream().sorted(Comparator.comparing(Genre::getId)).collect(Collectors.toCollection(LinkedHashSet::new)))
                     .userLikes(likes.get(id))
                     .build();
         }).collect(Collectors.toList());

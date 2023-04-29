@@ -19,7 +19,7 @@ public class DbRatingDao implements RatingDao {
         String sql = "SELECT DISTINCT f.rating " +
                 "FROM film AS f ";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Rating(Ratings.getIdByRating(Ratings.valueOf(rs.getString("rating"))),
-                Ratings.valueOf(rs.getString("rating"))));
+                Ratings.valueOf(rs.getString("rating")).toString()));
     }
 
     @Override
@@ -29,6 +29,6 @@ public class DbRatingDao implements RatingDao {
                 "FROM film AS f " +
                 "WHERE f.RATING = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Rating(Ratings.getIdByRating(Ratings.valueOf(rs.getString("rating"))),
-                Ratings.valueOf(rs.getString("rating"))), ratingName);
+                Ratings.valueOf(rs.getString("rating")).toString()), ratingName);
     }
 }

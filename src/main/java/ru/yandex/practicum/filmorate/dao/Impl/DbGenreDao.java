@@ -16,20 +16,18 @@ public class DbGenreDao implements GenreDao {
 
     @Override
     public List<Genre> getGenres() {
-        String sql = "SELECT DISTINCT g.genre_id, g.name " +
-                "FROM film_genre AS fg " +
-                "JOIN genre AS g ON fg.GENRE_ID = g.GENRE_ID";
+        String sql = "SELECT * " +
+                "FROM genre AS g ";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(rs.getLong("genre_id"),
-                Genres.valueOf(rs.getString("name"))));
+                Genres.valueOf(rs.getString("name")).getTranslate()));
     }
 
     @Override
     public Genre getGenreById(Long genre_id) {
-        String sql = "SELECT DISTINCT g.genre_id, g.name " +
-                "FROM film_genre AS fg " +
-                "JOIN genre AS g ON fg.GENRE_ID = g.GENRE_ID " +
-                "WHERE fg.genre_id = ?";
+        String sql = "SELECT DISTINCT * " +
+                "FROM genre AS g " +
+                "WHERE g.genre_id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Genre(rs.getLong("genre_id"),
-                Genres.valueOf(rs.getString("name"))), genre_id);
+                Genres.valueOf(rs.getString("name")).getTranslate()), genre_id);
     }
 }

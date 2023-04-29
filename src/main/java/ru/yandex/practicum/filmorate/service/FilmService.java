@@ -12,7 +12,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.enums.Ratings;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -98,14 +100,12 @@ public class FilmService {
     }
 
     public List<Rating> getRatings() {
-        return ratingDao.getRatings();
+        List<Ratings> ratings = Arrays.asList(Ratings.values());
+        return ratings.stream().map(x -> new Rating(Ratings.getIdByRating(x), x.getName())).collect(Collectors.toList());
     }
 
     public Rating getRatingById(Integer ratingId) {
-        if (ratingDao.getRatings().stream().map(Rating::getId).anyMatch(x -> Objects.equals(x, ratingId))) {
-            return ratingDao.getRatingById(ratingId);
-        }
-        throw new ContentNotFountException(String.format("Рейтинг с id %d не найден", ratingId));
+        return new Rating(ratingId, Ratings.getRatingById(ratingId).toString());
     }
 
     private void checkFilmId(Long filmId) {

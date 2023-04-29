@@ -10,8 +10,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.dao.Impl.DbFilmDao;
 import ru.yandex.practicum.filmorate.dao.Impl.DbUserDao;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.enums.Ratings;
 import ru.yandex.practicum.filmorate.model.enums.Status;
 
 import java.time.LocalDate;
@@ -103,7 +103,7 @@ public class FilmorateApplicationTests {
                 .name("Тест")
                 .releaseDate(LocalDate.of(1990, 4, 7))
                 .duration(200)
-                .rating(Ratings.R)
+                .mpa(new Rating(1, null))
                 .build();
 
         Film returnedFilm = filmStorage.putFilm(film);
@@ -117,7 +117,7 @@ public class FilmorateApplicationTests {
                 .name("Тест")
                 .releaseDate(LocalDate.of(1990, 4, 7))
                 .duration(200)
-                .rating(Ratings.R)
+                .mpa(new Rating(1, null))
                 .build();
         Film returnedFilm = filmStorage.updateFilm(film);
         assertThat(returnedFilm).hasFieldOrPropertyWithValue("id", 1L)
