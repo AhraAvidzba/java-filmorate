@@ -60,7 +60,7 @@ public class FilmorateApplicationTests {
                 .name("A")
                 .email("avidzva@yandex.ru").build();
         User returnedUser = userStorage.updateUser(user);
-        assertThat(returnedUser).hasFieldOrPropertyWithValue("id", 1l)
+        assertThat(returnedUser).hasFieldOrPropertyWithValue("id", 1L)
                 .hasFieldOrPropertyWithValue("login", "akhraa1");
     }
 
