@@ -20,11 +20,6 @@ public class InMemoryFilmDao implements FilmDao {
     }
 
     @Override
-    public void removeAllFilms() {
-        films.clear();
-    }
-
-    @Override
     public Film getFilmById(Long id) {
         return films.get(id);
     }
@@ -40,11 +35,6 @@ public class InMemoryFilmDao implements FilmDao {
     public Film updateFilm(Film film) {
         films.put(film.getId(), film);
         return film;
-    }
-
-    @Override
-    public void removeFilmById(Long id) {
-        films.remove(id);
     }
 
     @Override

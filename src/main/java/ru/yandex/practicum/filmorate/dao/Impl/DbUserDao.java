@@ -30,16 +30,12 @@ public class DbUserDao implements UserDao {
         return jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs));
     }
 
-    @Override
-    public void removeAllUsers() {
-        String sql = "DELETE FROM _user";
-        jdbcTemplate.execute(sql);
-    }
 
     @Override
     public User getUserById(Long id) {
         String sql = "SELECT * FROM _user WHERE user_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeUser(rs), id);
+        List<User> users = jdbcTemplate.query(sql, (rs, rowNum) -> makeUser(rs), id);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     @Override
@@ -56,12 +52,6 @@ public class DbUserDao implements UserDao {
         String sql = "UPDATE _user SET birthday = ?, login = ?, email = ?, name = ? WHERE user_id = ?";
         jdbcTemplate.update(sql, user.getBirthday(), user.getLogin(), user.getEmail(), user.getName(), user.getId());
         return getUserById(user.getId());
-    }
-
-    @Override
-    public void removeUserById(Long id) {
-        String sql = "DELETE FROM _user WHERE user_id = ?";
-        jdbcTemplate.update(sql, id);
     }
 
     @Override

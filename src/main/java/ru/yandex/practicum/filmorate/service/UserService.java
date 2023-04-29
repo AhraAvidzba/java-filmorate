@@ -46,7 +46,7 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        if (user.getId() == null || !userDao.getAllUsers().contains(user)) {
+        if (user.getId() == null || getUserById(user.getId()) == null) {
             throw new ContentNotFountException("Пользователь не найден");
         }
         if (user.getName() == null || user.getName().isEmpty()) {
@@ -105,7 +105,7 @@ public class UserService {
 
     private User checkAndReturnUser(Long userId) {
         User user = userDao.getUserById(userId);
-        if (userId == null || user.getId() == null) {
+        if (userId == null || user == null || user.getId() == null) {
             throw new ContentNotFountException("Пользователь не найден");
         }
         return user;

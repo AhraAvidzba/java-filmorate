@@ -22,11 +22,6 @@ public class InMemoryUserDao implements UserDao {
     }
 
     @Override
-    public void removeAllUsers() {
-        users.clear();
-    }
-
-    @Override
     public User getUserById(Long id) {
         return users.get(id);
     }
@@ -42,11 +37,6 @@ public class InMemoryUserDao implements UserDao {
     public User updateUser(User user) {
         users.put(user.getId(), user);
         return user;
-    }
-
-    @Override
-    public void removeUserById(Long id) {
-        users.remove(id);
     }
 
     @Override

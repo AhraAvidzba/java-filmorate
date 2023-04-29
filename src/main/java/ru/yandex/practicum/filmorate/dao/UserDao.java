@@ -7,15 +7,11 @@ import java.util.List;
 public interface UserDao {
     List<User> getAllUsers();
 
-    void removeAllUsers();
-
     User getUserById(Long id);
 
     User putUser(User user);
 
     User updateUser(User user);
-
-    void removeUserById(Long id);
 
     void addToFriendsList(Long userId, Long friendId);
 

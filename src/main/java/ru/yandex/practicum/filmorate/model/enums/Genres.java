@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.model.enums;
 
-public enum Genre {
+public enum Genres {
     COMEDY("КОМЕДИЯ"),
     HORROR("УЖАСЫ"),
     DOCUMENTARY("ДОКУМЕНТАЛЬНЫЙ"),
@@ -17,7 +17,7 @@ public enum Genre {
 
     private final String name;
 
-    Genre(String name) {
+    Genres(String name) {
         this.name = name;
     }
 
