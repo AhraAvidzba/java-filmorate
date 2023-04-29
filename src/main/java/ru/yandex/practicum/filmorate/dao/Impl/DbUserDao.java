@@ -123,7 +123,7 @@ public class DbUserDao implements UserDao {
                 .build();
     }
 
-    private Map<Long, Status> makeFriendList(Long user_id) throws SQLException {
+    private Map<Long, Status> makeFriendList(Long userId) throws SQLException {
         String sql = "SELECT f.friend_id, f.STATUS " +
                 "FROM friendship AS f " +
                 "WHERE f.user_id = ? AND f.status = 'CONFIRMED' " +
@@ -131,7 +131,7 @@ public class DbUserDao implements UserDao {
                 "SELECT f.user_id, f.STATUS " +
                 "FROM friendship AS f " +
                 "WHERE f.friend_id = ? AND (f.status = 'CONFIRMED' OR f.status = 'UNCONFIRMED') ";
-        SqlRowSet res = jdbcTemplate.queryForRowSet(sql, user_id, user_id);
+        SqlRowSet res = jdbcTemplate.queryForRowSet(sql, userId, userId);
         Map<Long, Status> friendsList = new HashMap<>();
         while (res.next()) {
             friendsList.put(res.getLong("friend_id"), Status.valueOf(res.getString("status")));

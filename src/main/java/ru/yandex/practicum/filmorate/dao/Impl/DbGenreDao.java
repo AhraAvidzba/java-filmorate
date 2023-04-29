@@ -23,11 +23,11 @@ public class DbGenreDao implements GenreDao {
     }
 
     @Override
-    public Genre getGenreById(Long genre_id) {
+    public Genre getGenreById(Long genreId) {
         String sql = "SELECT DISTINCT * " +
                 "FROM genre AS g " +
                 "WHERE g.genre_id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Genre(rs.getLong("genre_id"),
-                Genres.valueOf(rs.getString("name")).getTranslate()), genre_id);
+                Genres.valueOf(rs.getString("name")).getTranslate()), genreId);
     }
 }

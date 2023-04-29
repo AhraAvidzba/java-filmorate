@@ -122,7 +122,7 @@ public class DbFilmDao implements FilmDao {
 
     }
 
-    private void fillGenres(Film film, Long film_id) {
+    private void fillGenres(Film film, Long filmId) {
         String genreSql = "INSERT INTO film_genre(film_id, genre_id) " +
                 "VALUES (?, ?)";
         List<Genre> genresList = new ArrayList<>(film.getGenres());
@@ -130,7 +130,7 @@ public class DbFilmDao implements FilmDao {
 
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setLong(1, film_id);
+                ps.setLong(1, filmId);
                 ps.setLong(2, genresList.get(i).getId());
             }
 
@@ -141,7 +141,7 @@ public class DbFilmDao implements FilmDao {
         });
     }
 
-    private void fillLikes(Film film, Long film_id) {
+    private void fillLikes(Film film, Long filmId) {
         String likesSql = "INSERT INTO likes(film_id, user_id) " +
                 "VALUES (?, ?)";
 
@@ -150,7 +150,7 @@ public class DbFilmDao implements FilmDao {
 
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
-                ps.setLong(1, film_id);
+                ps.setLong(1, filmId);
                 ps.setLong(2, likesList.get(i));
             }
 
