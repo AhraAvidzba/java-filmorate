@@ -7,5 +7,5 @@ import java.util.List;
 public interface RatingDao {
     List<Rating> getRatings();
 
-    Rating getRatingById(Integer rating_id);
+    Rating getRatingById(Integer ratingId);
 }

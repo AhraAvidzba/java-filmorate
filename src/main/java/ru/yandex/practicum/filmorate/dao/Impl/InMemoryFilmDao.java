@@ -38,13 +38,13 @@ public class InMemoryFilmDao implements FilmDao {
     }
 
     @Override
-    public void putLike(Long film_id, Long user_id) {
-        getFilmById(film_id).getUserLikes().add(user_id);
+    public void putLike(Long filmId, Long userId) {
+        getFilmById(filmId).getUserLikes().add(userId);
     }
 
     @Override
-    public void removeLike(Long film_id, Long user_id) {
-        getFilmById(film_id).getUserLikes().remove(user_id);
+    public void removeLike(Long filmId, Long userId) {
+        getFilmById(filmId).getUserLikes().remove(userId);
     }
 
     private Long generateId() {

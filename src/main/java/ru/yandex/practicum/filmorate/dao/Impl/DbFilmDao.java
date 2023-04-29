@@ -110,15 +110,15 @@ public class DbFilmDao implements FilmDao {
     }
 
     @Override
-    public void putLike(Long user_id, Long film_id) {
+    public void putLike(Long filmId, Long userId) {
         String sql = "MERGE INTO likes KEY (film_id, user_id) VALUES(?, ?);";
-        jdbcTemplate.update(sql, film_id, user_id);
+        jdbcTemplate.update(sql, userId, filmId);
     }
 
     @Override
-    public void removeLike(Long user_id, Long film_id) {
+    public void removeLike(Long filmId, Long userId) {
         String sql = "DELETE FROM likes WHERE film_id = ? AND user_id = ?";
-        jdbcTemplate.update(sql, film_id, user_id);
+        jdbcTemplate.update(sql, userId, filmId);
 
     }
 

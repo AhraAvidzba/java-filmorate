@@ -14,8 +14,7 @@ public interface FilmDao {
 
     Film updateFilm(Film task);
 
-    void putLike(Long film_id, Long user_id);
+    void putLike(Long filmId, Long userId);
 
-    void removeLike(Long film_id, Long user_id);
-
+    void removeLike(Long filmId, Long userId);
 }
