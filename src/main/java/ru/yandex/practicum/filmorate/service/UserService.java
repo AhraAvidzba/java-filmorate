@@ -78,7 +78,6 @@ public class UserService {
     public void delFromFriendsList(Long userId, Long friendId) {
         User user = checkAndReturnUser(userId);
         User friend = checkAndReturnUser(friendId);
-        System.out.println(user);
         if (!user.getFriendsList().containsKey(friendId)
                 && !friend.getFriendsList().containsKey(userId)) {
             throw new ContentNotFountException("Запросы на дружбу от указанных пользователей друг другу не отправлялись");

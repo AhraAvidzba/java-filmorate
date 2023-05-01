@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.GenreDao;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.enums.Genres;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class DbGenreDao implements GenreDao {
         String sql = "SELECT * " +
                 "FROM genre AS g ";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(rs.getLong("genre_id"),
-                Genres.valueOf(rs.getString("name")).getTranslate()));
+                rs.getString("name")));
     }
 
     @Override
@@ -28,6 +27,6 @@ public class DbGenreDao implements GenreDao {
                 "FROM genre AS g " +
                 "WHERE g.genre_id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Genre(rs.getLong("genre_id"),
-                Genres.valueOf(rs.getString("name")).getTranslate()), genreId);
+                rs.getString("name")), genreId);
     }
 }
