@@ -119,11 +119,11 @@ public class DbUserDao implements UserDao {
                 .login(rs.getString("login"))
                 .email(rs.getString("email"))
                 .name(rs.getString("name"))
-                .friendsList(makeFriendList(rs.getLong("user_id")))
+                .friendsList(getFriendList(rs.getLong("user_id")))
                 .build();
     }
 
-    private Map<Long, Status> makeFriendList(Long userId) throws SQLException {
+    private Map<Long, Status> getFriendList(Long userId) throws SQLException {
         String sql = "SELECT f.friend_id, f.STATUS " +
                 "FROM friendship AS f " +
                 "WHERE f.user_id = ? AND f.status = 'CONFIRMED' " +

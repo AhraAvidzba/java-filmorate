@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.RatingDao;
 import ru.yandex.practicum.filmorate.model.Rating;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Component("dbRatingDao")
@@ -17,8 +19,7 @@ public class DbRatingDao implements RatingDao {
     public List<Rating> getRatings() {
         String sql = "SELECT r.* " +
                 "FROM rating AS r ";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Rating(rs.getInt("rating_id"),
-                rs.getString("name")));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> makeRating(rs));
     }
 
     @Override
@@ -26,7 +27,11 @@ public class DbRatingDao implements RatingDao {
         String sql = "SELECT r.* " +
                 "FROM rating AS r " +
                 "WHERE r.rating_id = ?";
-        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Rating(rs.getInt("rating_id"),
-                rs.getString("name")), ratingId);
+        return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeRating(rs), ratingId);
+    }
+
+    private Rating makeRating(ResultSet rs) throws SQLException {
+        return new Rating(rs.getInt("rating_id"),
+                rs.getString("name"));
     }
 }

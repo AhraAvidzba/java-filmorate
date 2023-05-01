@@ -76,7 +76,7 @@ public class DbFilmDao implements FilmDao {
         }
 
         //Сохраняем список жанров к фильму
-        fillGenreTable(film, generatedId);
+        fillGenreTable(film.getGenres().stream().map(Genre::getId).collect(Collectors.toList()), generatedId);
 
         return getFilmById(generatedId);
     }
@@ -93,7 +93,7 @@ public class DbFilmDao implements FilmDao {
         //Сохраняем список жанров к фильму
         String sql3 = "DELETE FROM film_genre WHERE film_id = ?";
         jdbcTemplate.update(sql3, film.getId());
-        fillGenreTable(film, film.getId());
+        fillGenreTable(film.getGenres().stream().map(Genre::getId).collect(Collectors.toList()), film.getId());
 
         return getFilmById(film.getId());
     }
@@ -110,16 +110,15 @@ public class DbFilmDao implements FilmDao {
         jdbcTemplate.update(sql, filmId, userId);
     }
 
-    private void fillGenreTable(Film film, Long filmId) {
+    private void fillGenreTable(List<Long> genresList, Long filmId) {
         String genreSql = "INSERT INTO film_genre(film_id, genre_id) " +
                 "VALUES (?, ?)";
-        List<Genre> genresList = new ArrayList<>(film.getGenres());
         jdbcTemplate.batchUpdate(genreSql, new BatchPreparedStatementSetter() {
 
             @Override
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 ps.setLong(1, filmId);
-                ps.setLong(2, genresList.get(i).getId());
+                ps.setLong(2, genresList.get(i));
             }
 
             @Override
