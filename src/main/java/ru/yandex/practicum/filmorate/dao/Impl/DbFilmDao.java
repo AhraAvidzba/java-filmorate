@@ -191,9 +191,4 @@ public class DbFilmDao implements FilmDao {
         } while (rs.next());
         return likes;
     }
-
-    public void putGenre(Integer id, String name) {
-        String sql = "MERGE INTO genre KEY (genre_id) VALUES(?, ?)";
-        jdbcTemplate.update(sql, id, name);
-    }
 }
