@@ -1,14 +1,12 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dao;
 
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
 
-public interface FilmStorage {
+public interface FilmDao {
 
     List<Film> getAllFilms();
-
-    void removeAllFilms();
 
     Film getFilmById(Long id);
 
@@ -16,5 +14,7 @@ public interface FilmStorage {
 
     Film updateFilm(Film task);
 
-    void removeFilmById(Long id);
+    void putLike(Long filmId, Long userId);
+
+    void removeLike(Long filmId, Long userId);
 }

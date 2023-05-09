@@ -25,7 +25,7 @@ public class FilmValidateTest {
                 .name("")
                 .description("Пандора")
                 .releaseDate(LocalDate.of(2009, 12, 18))
-                .duration(162L)
+                .duration(162)
                 .build();
         ConstraintViolationException ex = assertThrows(
                 ConstraintViolationException.class,
@@ -39,7 +39,7 @@ public class FilmValidateTest {
                 .name("Аватар")
                 .description("Пандора".repeat(30))
                 .releaseDate(LocalDate.of(2009, 12, 18))
-                .duration(162L)
+                .duration(162)
                 .build();
         ConstraintViolationException ex = assertThrows(
                 ConstraintViolationException.class,
@@ -53,7 +53,7 @@ public class FilmValidateTest {
                 .name("Аватар")
                 .description("Пандора")
                 .releaseDate(LocalDate.of(1700, 12, 18))
-                .duration(162L)
+                .duration(162)
                 .build();
         ConstraintViolationException ex = assertThrows(
                 ConstraintViolationException.class,
@@ -67,7 +67,7 @@ public class FilmValidateTest {
                 .name("Аватар")
                 .description("Пандора")
                 .releaseDate(LocalDate.of(3000, 12, 18))
-                .duration(162L)
+                .duration(162)
                 .build();
         ConstraintViolationException ex = assertThrows(
                 ConstraintViolationException.class,

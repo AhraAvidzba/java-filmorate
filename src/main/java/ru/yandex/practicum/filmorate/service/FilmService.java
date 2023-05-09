@@ -1,30 +1,44 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.ContentAlreadyExistException;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.dao.GenreDao;
+import ru.yandex.practicum.filmorate.dao.RatingDao;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.exceptions.ContentNotFountException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Rating;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class FilmService {
-    private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final FilmDao filmDao;
+    private final UserDao userDao;
+    private final GenreDao genreDao;
+    private final RatingDao ratingDao;
+
+    @Autowired
+    public FilmService(@Qualifier("dbFilmDao") FilmDao filmDao, @Qualifier("dbUserDao") UserDao userDao, GenreDao genreDao, RatingDao ratingDao) {
+        this.filmDao = filmDao;
+        this.userDao = userDao;
+        this.genreDao = genreDao;
+        this.ratingDao = ratingDao;
+    }
 
     public List<Film> getAllFilms() {
-        return filmStorage.getAllFilms();
+        return filmDao.getAllFilms();
     }
 
     public Film getFilmById(Long id) {
-        Film film = filmStorage.getFilmById(id);
+        Film film = filmDao.getFilmById(id);
         if (film == null) {
             throw new ContentNotFountException("Фильм не найден");
         }
@@ -32,27 +46,26 @@ public class FilmService {
     }
 
     public Film putFilm(Film film) {
-        if (filmStorage.getAllFilms().contains(film)) {
-            throw new ContentAlreadyExistException("Фильм уже присутствует в медиатеке");
-        }
-        return filmStorage.putFilm(film);
+        return filmDao.putFilm(film);
     }
 
     public Film updateFilm(Film film) {
-        if (film.getId() == null || !filmStorage.getAllFilms().contains(film)) {
+        if (film.getId() == null || getFilmById(film.getId()) == null) {
             throw new ContentNotFountException("Фильм не найден");
         }
-        return filmStorage.updateFilm(film);
+        return filmDao.updateFilm(film);
     }
 
-    public void addLike(Long userId, Long filmId) {
+    public void addLike(Long filmId, Long userId) {
         checkUserId(userId);
-        checkAndReturnFilm(filmId).getUserLikes().add(userId);
+        checkFilmId(filmId);
+        filmDao.putLike(filmId, userId);
     }
 
-    public void removeLike(Long userId, Long filmId) {
+    public void removeLike(Long filmId, Long userId) {
         checkUserId(userId);
-        checkAndReturnFilm(filmId).getUserLikes().remove(userId);
+        checkFilmId(filmId);
+        filmDao.removeLike(filmId, userId);
     }
 
     public List<Film> findPopularFilms(Integer size) {
@@ -60,25 +73,45 @@ public class FilmService {
         if (size == null || size <= 0) {
             throw new RuntimeException("Значение size должно быть больше нуля");
         }
-        return filmStorage.getAllFilms().stream()
+        return filmDao.getAllFilms().stream()
                 .sorted(Comparator.comparing(x -> x.getUserLikes().size(), Comparator.reverseOrder()))
                 .limit(size)
                 .collect(Collectors.toList());
     }
 
+    public List<Genre> getGenres() {
+        return genreDao.getGenres();
+    }
+
+    public Genre getGenreById(Long genreId) {
+        if (genreDao.getGenres().stream().map(Genre::getId).anyMatch(x -> Objects.equals(x, genreId))) {
+            return genreDao.getGenreById(genreId);
+        }
+        throw new ContentNotFountException(String.format("Жанр с id %d не найден", genreId));
+    }
+
     private void checkUserId(Long userId) {
-        User user = userStorage.getUserById(userId);
+        User user = userDao.getUserById(userId);
         if (userId == null || user == null) {
             throw new ContentNotFountException("Пользователь не найден");
         }
-
     }
 
-    private Film checkAndReturnFilm(Long filmId) {
-        Film film = filmStorage.getFilmById(filmId);
+    public List<Rating> getRatings() {
+        return ratingDao.getRatings();
+    }
+
+    public Rating getRatingById(Integer ratingId) {
+        if (getRatings().stream().noneMatch(x -> Objects.equals(x.getId(), ratingId))) {
+            throw new ContentNotFountException(String.format("Рейтинг с id %d не найден", ratingId));
+        }
+        return ratingDao.getRatingById(ratingId);
+    }
+
+    private void checkFilmId(Long filmId) {
+        Film film = filmDao.getFilmById(filmId);
         if (filmId == null || film == null) {
             throw new ContentNotFountException("Фильм не найден");
         }
-        return film;
     }
 }

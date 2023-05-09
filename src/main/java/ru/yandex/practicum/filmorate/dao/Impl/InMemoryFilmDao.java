@@ -1,6 +1,7 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.dao.Impl;
 
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage {
+public class InMemoryFilmDao implements FilmDao {
 
     private final Map<Long, Film> films = new HashMap<>();
     private Long globalId = 1L;
@@ -16,11 +17,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public List<Film> getAllFilms() {
         return List.copyOf(films.values());
-    }
-
-    @Override
-    public void removeAllFilms() {
-        films.clear();
     }
 
     @Override
@@ -42,8 +38,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void removeFilmById(Long id) {
-        films.remove(id);
+    public void putLike(Long filmId, Long userId) {
+        getFilmById(filmId).getUserLikes().add(userId);
+    }
+
+    @Override
+    public void removeLike(Long filmId, Long userId) {
+        getFilmById(filmId).getUserLikes().remove(userId);
     }
 
     private Long generateId() {
